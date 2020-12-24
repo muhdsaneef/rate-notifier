@@ -7,8 +7,21 @@ import javax.inject.Inject
 
 class RateNotifierRepositoryImpl @Inject constructor(private val rateNotifierApi: RateNotifierApi) :
     RateNotifierRepository {
-    override fun fetchExchangeRate(): Observable<Double> {
-        val request = ExchangeRateRequestModel(sourceCurrency = "SGD", targetCurrency = "INR")
+    override fun fetchExchangeRate(
+        sourceCurrency: String,
+        targetCurrency: String
+    ): Observable<Double> {
+        val source = if (sourceCurrency.isNotEmpty()) {
+            sourceCurrency
+        } else {
+            "SGD"
+        }
+        val target = if (targetCurrency.isNotEmpty()) {
+            targetCurrency
+        } else {
+           "INR"
+        }
+        val request = ExchangeRateRequestModel(sourceCurrency = source, targetCurrency = target)
 
         return rateNotifierApi.fetchExchangeRate(request).subscribeOn(Schedulers.io())
             .map { it.rate }

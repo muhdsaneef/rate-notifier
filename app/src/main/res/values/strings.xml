@@ -3,4 +3,8 @@
     <string name="action_update">Update</string>
     <string name="message_loaded">Loaded</string>
     <string name="message_failed">Failed</string>
+    <string name="hint_source_currency">Source currency</string>
+    <string name="hint_target_currency">Target currency</string>
+    <string name="label_exchange_rate">Rate: %s</string>
+    <string name="action_scan">Scan</string>
 </resources>

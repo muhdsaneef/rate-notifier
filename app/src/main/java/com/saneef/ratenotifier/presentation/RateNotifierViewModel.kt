@@ -1,15 +1,12 @@
 package com.saneef.ratenotifier.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.saneef.ratenotifier.domain.RateNotifierRepository
-import com.saneef.ratenotifier.domain.RateNotifierRepositoryImpl
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class RateNotifierViewModel @Inject constructor(private val repository: RateNotifierRepository) :
@@ -25,9 +22,25 @@ class RateNotifierViewModel @Inject constructor(private val repository: RateNoti
     val uiViewState: LiveData<UiState>
         get() = _uiState
 
+    var sourceCurrency = MutableLiveData<String>()
+    var targetCurrency = MutableLiveData<String>()
+    val _amount = MutableLiveData<String>()
+    val amountViewState: LiveData<String>
+    get() = _amount
+
+
+    fun convertAmount(amount: Double) {
+        if (amount !=0.0 && _exchangeRateState.value != null) {
+           _amount.postValue((amount*_exchangeRateState.value!!).toString())
+        }
+    }
+
     fun loadExchangeRate() {
         compositeDisposable.add(
-            repository.fetchExchangeRate()
+            repository.fetchExchangeRate(
+                sourceCurrency.value.orEmpty(),
+                targetCurrency.value.orEmpty()
+            )
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { _uiState.postValue(UiState.LOADING) }
                 .subscribe(this::handleSuccess, this::handleFailure)

@@ -1,6 +1,8 @@
 package com.saneef.ratenotifier.presentation.ui
 
+import android.app.Activity.RESULT_OK
 import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
+import androidx.databinding.DataBindingUtil
 import com.saneef.ratenotifier.R
 import com.saneef.ratenotifier.app.RateNotifierApplication
 import com.saneef.ratenotifier.databinding.RateNotifierFragmentBinding
@@ -32,7 +36,8 @@ class RateNotifierFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = RateNotifierFragmentBinding.inflate(inflater, container, false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.rate_notifier_fragment, container, false)
+        binding.lifecycleOwner = this
 
         return binding.root
     }
@@ -49,24 +54,52 @@ class RateNotifierFragment : Fragment() {
         viewModel.loadExchangeRate()
 
         observeViewModelChanges()
+        observeInputChangeListeners()
+    }
+
+    private fun observeInputChangeListeners() {
+        binding.sourceCurrencyEditText.addTextChangedListener {
+            viewModel.sourceCurrency.postValue(it.toString())
+        }
+
+        binding.targetCurrencyEditText.addTextChangedListener {
+            viewModel.targetCurrency.postValue(it.toString())
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setUpdateButtonClickListener()
+        setButtonClickListener()
     }
 
-    private fun setUpdateButtonClickListener() {
+    private fun setButtonClickListener() {
         binding.fetchRateButton.setOnClickListener {
             viewModel.loadExchangeRate()
+        }
+
+        binding.scanButton.setOnClickListener {
+            startActivityForResult(Intent(requireContext(), ScannerActivity::class.java), 9001)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 9001) {
+            if (resultCode == RESULT_OK) {
+                data?.run {
+                    if (hasExtra("text")) {
+                        viewModel.convertAmount(getDoubleExtra("text", 0.0))
+                    }
+                }
+            }
         }
     }
 
     private fun observeViewModelChanges() {
         with(viewModel) {
             exchangeRateViewState.observe(this@RateNotifierFragment, {
-                binding.rateTextView.text = it.toString()
+                binding.rateTextView.text = getString(R.string.label_exchange_rate, it.toString())
             })
 
             uiViewState.observe(this@RateNotifierFragment, {
@@ -74,6 +107,10 @@ class RateNotifierFragment : Fragment() {
                 if (it != UiState.LOADING) {
                     showToast(it)
                 }
+            })
+
+            amountViewState.observe(this@RateNotifierFragment, {
+                binding.convertedRateTextView.text = it
             })
         }
     }

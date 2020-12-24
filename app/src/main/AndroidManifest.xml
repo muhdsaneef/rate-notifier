@@ -3,6 +3,8 @@
     package="com.saneef.ratenotifier">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".app.RateNotifierApplication"
@@ -12,8 +14,11 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.RateNotifier">
-
-        <activity android:name="com.saneef.ratenotifier.presentation.ui.RateNotifierActivity">
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="ocr" />
+        <activity android:name=".presentation.ui.ScannerActivity"></activity>
+        <activity android:name=".presentation.ui.RateNotifierActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
