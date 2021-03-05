@@ -33,21 +33,11 @@ class RateNotifierViewModel @Inject constructor(private val repository: RateNoti
 
     var sourceCurrency = MutableLiveData<String>()
     var targetCurrency = MutableLiveData<String>()
-    val _amount = MutableLiveData<String>()
-    val amountViewState: LiveData<String>
-    get() = _amount
 
     @ExperimentalCoroutinesApi
     private val newValueSignal = BroadcastChannel<AnimationAction>(Channel.BUFFERED)
     @ExperimentalCoroutinesApi
     val newValueSignalReceiver = newValueSignal.asFlow()
-
-
-    fun convertAmount(amount: Double) {
-        if (amount !=0.0 && _exchangeRateState.value != null) {
-           _amount.postValue((amount*_exchangeRateState.value?.rate!!).toString())
-        }
-    }
 
     fun loadExchangeRate() {
         compositeDisposable.add(

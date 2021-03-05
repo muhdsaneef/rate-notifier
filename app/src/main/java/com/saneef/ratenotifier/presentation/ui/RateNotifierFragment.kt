@@ -1,9 +1,6 @@
 package com.saneef.ratenotifier.presentation.ui
 
-import android.app.Activity.RESULT_OK
 import android.content.Context
-import android.content.Intent
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import com.saneef.ratenotifier.R
 import com.saneef.ratenotifier.app.RateNotifierApplication
 import com.saneef.ratenotifier.databinding.RateNotifierFragmentBinding
-import com.saneef.ratenotifier.di.DaggerAppComponent
 import com.saneef.ratenotifier.presentation.AnimationAction
 import com.saneef.ratenotifier.presentation.RateNotifierViewModel
 import com.saneef.ratenotifier.presentation.UiState
@@ -53,7 +49,7 @@ class RateNotifierFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        //viewModel.loadExchangeRate()
+        viewModel.loadExchangeRate()
 
         observeViewModelChanges()
         observeInputChangeListeners()
@@ -76,14 +72,6 @@ class RateNotifierFragment : Fragment() {
     }
 
     private fun setButtonClickListener() {
-        binding.fetchRateButton.setOnClickListener {
-            viewModel.loadExchangeRate()
-        }
-
-        binding.scanButton.setOnClickListener {
-            startActivityForResult(Intent(requireContext(), ScannerActivity::class.java), 9001)
-        }
-
         binding.rateDetailsCard.refreshImageButton.setOnClickListener {
             viewModel.loadExchangeRate()
         }
@@ -93,25 +81,10 @@ class RateNotifierFragment : Fragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 9001) {
-            if (resultCode == RESULT_OK) {
-                data?.run {
-                    if (hasExtra("text")) {
-                        viewModel.convertAmount(getDoubleExtra("text", 0.0))
-                    }
-                }
-            }
-        }
-    }
-
     @ExperimentalCoroutinesApi
     private fun observeViewModelChanges() {
         with(viewModel) {
             exchangeRateViewState.observe(viewLifecycleOwner, {
-                binding.rateTextView.text =
-                    getString(R.string.label_exchange_rate, it.rate.toString())
                 binding.rateDetailsCard.currentRateTextView.text = it.rate.toString()
             })
 
@@ -120,10 +93,6 @@ class RateNotifierFragment : Fragment() {
                 if (it != UiState.LOADING) {
                     showToast(it)
                 }
-            })
-
-            amountViewState.observe(viewLifecycleOwner, {
-                binding.convertedRateTextView.text = it
             })
 
             storedExchangeRates.observe(viewLifecycleOwner, {

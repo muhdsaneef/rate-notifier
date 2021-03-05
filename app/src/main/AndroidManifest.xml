@@ -17,11 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RateNotifier">
 
-        <meta-data
-            android:name="com.google.mlkit.vision.DEPENDENCIES"
-            android:value="ocr" />
-
-        <activity android:name=".presentation.ui.ScannerActivity" />
         <activity android:name=".presentation.ui.RateNotifierActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
