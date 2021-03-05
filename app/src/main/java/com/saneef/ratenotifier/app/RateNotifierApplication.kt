@@ -1,6 +1,12 @@
 package com.saneef.ratenotifier.app
 
 import android.app.Application
+import com.facebook.flipper.android.AndroidFlipperClient
+import com.facebook.flipper.android.utils.FlipperUtils
+import com.facebook.flipper.plugins.inspector.DescriptorMapping
+import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
+import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
+import com.facebook.soloader.SoLoader
 import com.saneef.ratenotifier.BuildConfig
 import com.saneef.ratenotifier.di.AppComponent
 import com.saneef.ratenotifier.di.DaggerAppComponent
@@ -22,6 +28,16 @@ class RateNotifierApplication : Application() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
+        }
+
+        SoLoader.init(this, false);
+
+        if (BuildConfig.DEBUG && FlipperUtils.shouldEnableFlipper(this)) {
+            val client = AndroidFlipperClient.getInstance(this);
+
+            client.addPlugin(InspectorFlipperPlugin(this, DescriptorMapping.withDefaults()));
+            client.addPlugin(NetworkFlipperPlugin())
+            client.start();
         }
     }
 }

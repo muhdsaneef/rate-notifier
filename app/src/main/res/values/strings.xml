@@ -3,8 +3,14 @@
     <string name="action_update">Update</string>
     <string name="message_loaded">Loaded</string>
     <string name="message_failed">Failed</string>
-    <string name="hint_source_currency">Source currency</string>
-    <string name="hint_target_currency">Target currency</string>
+    <string name="hint_source_currency">SGD</string>
+    <string name="hint_target_currency">INR</string>
     <string name="label_exchange_rate">Rate: %s</string>
     <string name="action_scan">Scan</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_view_list">View List</string>
+    <string name="action_enable_auto_update">Enable auto-update</string>
+    <string name="label_to">to</string>
+    <string name="label_conversion_rate">Conversion rate:</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.saneef.ratenotifier.di
 
+import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
+import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -30,8 +32,18 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHTTPClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
-        return OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor).build()
+    fun provideOkHTTPClient(
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        flipperOkhttpInterceptor: FlipperOkhttpInterceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor)
+            .addNetworkInterceptor(flipperOkhttpInterceptor).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFlipperOkhttpInterceptor(): FlipperOkhttpInterceptor {
+        return FlipperOkhttpInterceptor(NetworkFlipperPlugin())
     }
 
     @Provides

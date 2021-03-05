@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rateDetailsCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/corner_radius_l">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rateDetailsConstraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/d2"
+        android:paddingVertical="@dimen/d3">
+
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/sourceCurrencyEditText"
+            android:layout_width="@dimen/d6"
+            android:layout_height="@dimen/d6"
+            android:hint="@string/hint_source_currency"
+            android:imeOptions="actionNext"
+            android:maxLength="3"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/conversionLabelTextView"
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/d2"
+            app:layout_constraintStart_toEndOf="@+id/sourceCurrencyEditText"
+            app:layout_constraintTop_toTopOf="@+id/sourceCurrencyEditText"
+            app:layout_constraintBottom_toBottomOf="@+id/sourceCurrencyEditText"
+            android:text="@string/label_to"/>
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/targetCurrencyEditText"
+            android:layout_width="@dimen/d6"
+            android:layout_height="@dimen/d6"
+            android:hint="@string/hint_target_currency"
+            android:imeOptions="actionDone"
+            android:maxLength="3"
+            android:maxLines="1"
+            android:layout_marginStart="@dimen/d3"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey"
+            app:layout_constraintBottom_toBottomOf="@+id/sourceCurrencyEditText"
+            app:layout_constraintStart_toEndOf="@+id/conversionLabelTextView"
+            app:layout_constraintTop_toTopOf="@+id/sourceCurrencyEditText" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/conversionRateLabelTextView"
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sourceCurrencyEditText"
+            android:layout_marginTop="@dimen/d2"
+            android:text="@string/label_conversion_rate"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/currentRateTextView"
+            style="@style/InformationStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/d2"
+            app:layout_constraintStart_toEndOf="@+id/conversionRateLabelTextView"
+            app:layout_constraintTop_toTopOf="@+id/conversionRateLabelTextView"
+            app:layout_constraintBottom_toBottomOf="@+id/conversionRateLabelTextView"
+            tools:text="54.65"/>
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/autoUpdateCheckBox"
+            style="@style/LabelStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d2"
+            android:text="@string/action_enable_auto_update"
+            app:layout_constraintStart_toStartOf="@+id/conversionRateLabelTextView"
+            app:layout_constraintTop_toBottomOf="@+id/conversionRateLabelTextView" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/refreshImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/d2"
+            android:background="@drawable/bg_white_black_m"
+            android:src="@drawable/ic_refresh"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

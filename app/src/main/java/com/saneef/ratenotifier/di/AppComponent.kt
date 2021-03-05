@@ -1,6 +1,5 @@
 package com.saneef.ratenotifier.di
 
-import android.app.Application
 import android.content.Context
 import com.saneef.ratenotifier.presentation.ui.RateNotifierFragment
 import dagger.BindsInstance
@@ -16,7 +15,8 @@ import javax.inject.Singleton
         ApiModule::class,
         AndroidInjectionModule::class,
         ViewModelModule::class,
-        AppModule::class
+        AppModule::class,
+        DatabaseModule::class
     ]
 )
 interface AppComponent {
